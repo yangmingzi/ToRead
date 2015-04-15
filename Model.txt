@@ -1,0 +1,67 @@
+#-*- coding: utf8 -*-
+from CURD import Database, Model, Field, SelectResult
+
+Database.config(host='10.108.145.189',user='display',passwd='123456',db='douban',charset='
+latin1')
+
+class DoubanUser(Model):
+    user_id = Field(is_primarykey=True)
+    user_ip = Field()
+    user_ua = Field()
+
+class DoubanUserAccessUrl(Model):
+    access_id = Field(is_primarykey=True)
+    user_id = Field()
+    host = Field()
+    path = Field()
+
+class DoubanMovie(Model):
+    id = Field(is_primarykey=True)
+    doubanid = Field()
+    title = Field()
+    directors = Field()
+    image = Field()
+    casts = Field()
+    genres = Field()
+
+class DoubanMovieNewest(Model):
+    id = Field(is_primarykey=True)
+    movie_id = Field()
+
+class DoubanDirector(Model):
+    id = Field(is_primarykey=True)
+    doubanid = Field()
+    avatars = Field()
+    name = Field()
+
+class DoubanCast(Model):
+    id = Field(is_primarykey=True)
+    doubanid = Field()
+    avatars = Field()
+    name = Field()
+
+class DoubanGenre(Model):
+    id = Field(is_primarykey=True)
+    genres = Field()
+
+class DoubanUserAction(Model):
+    action_id = Field(is_primarykey=True)
+    user_id = Field()
+    action_type = Field()
+    domain_id = Field()
+    category_id = Field()
+    frequency = Field()
+    time = Field()
+
+class DoubanUserInterest(Model):
+    interest_id = Field(is_primarykey=True)
+    user_id = Field()
+    domain_id = Field()
+    rank = Field()
+    category_id = Field()
+
+class DoubanUserRecommend(Model):
+    recommend_id = Field(is_primarykey=True)
+    user_id = Field()
+    movie_id = Field()
+    rank = Field()

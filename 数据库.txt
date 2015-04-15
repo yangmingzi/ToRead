@@ -1,0 +1,131 @@
+2.1 douban_user_action
+表结构：
++-------------+------------------+------+-----+---------+----------------+
+| Field       | Type             | Null | Key | Default | Extra          |
++-------------+------------------+------+-----+---------+----------------+
+| action_id   | int(11) unsigned | NO   | PRI | NULL    | auto_increment |
+| user_id     | int(11) unsigned | NO   |     | NULL    |                |
+| action_type | int(1) unsigned  | NO   |     | NULL    |                |
+| domain_id   | int(1) unsigned  | NO   |     | NULL    |                |
+| category_id | int(1) unsigned  | NO   |     | NULL    |                |
+| frequency   | int(11) unsigned | NO   |     | NULL    |                |
+| time        | int(10) unsigned | NO   |     | NULL    |                |
++-------------+------------------+------+-----+---------+----------------+
+字段说明：
+	action_type: 0->search, 1->access, 2->relate
+	domain_id: 0->movie, 1->director, 2->cast, 3->genre
+	
+2.2 douban_user_interest
+表结构:
++-------------+------------------+------+-----+---------+-------+
+| Field       | Type             | Null | Key | Default | Extra |
++-------------+------------------+------+-----+---------+-------+
+| user_id     | int(11) unsigned | NO   |     | NULL    |       |
+| domain_id   | int(1) unsigned  | NO   |     | NULL    |       |
+| rank        | int(1) unsigned  | NO   |     | NULL    |       |
+| category_id | int(1) unsigned  | NO   |     | NULL    |       |
+| interest_id | int(11)          | NO   | PRI | 0       |       |
++-------------+------------------+------+-----+---------+-------+
+
+2.3 douban_user_recommend
+表结构:
++-----------------+------------------+------+-----+---------+-------+
+| Field           | Type             | Null | Key | Default | Extra |
++-----------------+------------------+------+-----+---------+-------+
+| user_id         | int(11) unsigned | NO   |     | NULL    |       |
+| movie_id        | int(11) unsigned | NO   |     | NULL    |       |
+| interest_degree | int(3) unsigned  | NO   |     | NULL    |       |
+| recommend_id    | int(11)          | NO   | PRI | 0       |       |
++-----------------+------------------+------+-----+---------+-------+
+字段说明：
+	interest_degree: 100满分制，int类型
+
+2.4 douban_movie_newest
+表结构:
++----------+------------------+------+-----+---------+-------+
+| Field    | Type             | Null | Key | Default | Extra |
++----------+------------------+------+-----+---------+-------+
+| id       | int(11) unsigned | NO   | PRI | NULL    |       |
+| movie_id | int(11) unsigned | NO   |     | NULL    |       |
++----------+------------------+------+-----+---------+-------+
+
+2.5 douban_movie
+表结构：
++-----------+--------------+------+-----+---------+-------+
+| Field     | Type         | Null | Key | Default | Extra |
++-----------+--------------+------+-----+---------+-------+
+| id        | int(11)      | NO   | PRI | 0       |       |
+| doubanid  | char(10)     | YES  |     | NULL    |       |
+| rating    | varchar(10)  | YES  |     | NULL    |       |
+| title     | varchar(100) | YES  | MUL | NULL    |       |
+| image     | varchar(100) | YES  |     | NULL    |       |
+| alt       | varchar(100) | YES  |     | NULL    |       |
+| year      | char(10)     | YES  |     | NULL    |       |
+| directors | varchar(100) | YES  |     | NULL    |       |
+| casts     | varchar(200) | YES  |     | NULL    |       |
+| countries | varchar(100) | YES  |     | NULL    |       |
+| genres    | varchar(200) | YES  |     | NULL    |       |
++-----------+--------------+------+-----+---------+-------+
+
+2.6 douban_director
+表结构：
++----------+--------------+------+-----+---------+-------+
+| Field    | Type         | Null | Key | Default | Extra |
++----------+--------------+------+-----+---------+-------+
+| id       | int(11)      | NO   | PRI | 0       |       |
+| doubanid | char(10)     | YES  |     | NULL    |       |
+| name     | varchar(200) | YES  |     | NULL    |       |
+| avatars  | varchar(100) | YES  |     | NULL    |       |
+| alt      | varchar(100) | YES  |     | NULL    |       |
++----------+--------------+------+-----+---------+-------+
+
+2.7 douban_cast
+表结构：
++----------+--------------+------+-----+---------+-------+
+| Field    | Type         | Null | Key | Default | Extra |
++----------+--------------+------+-----+---------+-------+
+| id       | int(11)      | NO   | PRI | 0       |       |
+| doubanid | char(10)     | YES  |     | NULL    |       |
+| name     | varchar(200) | YES  |     | NULL    |       |
+| avatars  | varchar(100) | YES  |     | NULL    |       |
+| alt      | varchar(100) | YES  |     | NULL    |       |
++----------+--------------+------+-----+---------+-------+
+
+2.8 douban_genre
+表结构：
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| id     | int(11)     | NO   | PRI | 0       |       |
+| genres | varchar(20) | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+
+2.9 douban_country
+表结构：
++---------+--------------+------+-----+---------+-------+
+| Field   | Type         | Null | Key | Default | Extra |
++---------+--------------+------+-----+---------+-------+
+| id      | int(11)      | NO   | PRI | 0       |       |
+| country | varchar(100) | YES  |     | NULL    |       |
++---------+--------------+------+-----+---------+-------+
+
+2.10 douban_user
+表结构：
++---------+------------------+------+-----+---------+----------------+
+| Field   | Type             | Null | Key | Default | Extra          |
++---------+------------------+------+-----+---------+----------------+
+| user_id | int(11) unsigned | NO   | PRI | NULL    | auto_increment |
+| user_ip | char(32)         | YES  |     | NULL    |                |
+| user_ua | char(255)        | YES  |     | NULL    |                |
++---------+------------------+------+-----+---------+----------------+
+
+2.11 douban_user_access_url
+表结构：
++-----------+------------------+------+-----+---------+----------------+
+| Field     | Type             | Null | Key | Default | Extra          |
++-----------+------------------+------+-----+---------+----------------+
+| access_id | int(11) unsigned | NO   | PRI | NULL    | auto_increment |
+| user_id   | int(11)          | YES  |     | NULL    |                |
+| host      | char(32)         | YES  |     | NULL    |                |
+| path      | char(255)        | YES  |     | NULL    |                |
++-----------+------------------+------+-----+---------+----------------+
