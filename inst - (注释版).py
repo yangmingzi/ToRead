@@ -232,7 +232,7 @@ class UserInterest:
 
     def run(self):
         self.process_input()
-###生成用户兴趣
+###计算用户兴趣指数并生成用户兴趣字典
     def rank_user_interest(self, user_id):
         ##建立Interest字典
         user_interest = [{} for _ in range(DOMAIN_NUM)]
