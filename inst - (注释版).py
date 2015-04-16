@@ -234,20 +234,20 @@ class UserInterest:
         self.process_input()
 ###生成用户兴趣
     def rank_user_interest(self, user_id):
-        ###建立Interest字典
+        ##建立Interest字典
         user_interest = [{} for _ in range(DOMAIN_NUM)]
-        ###得到user的访问记录
+        ##得到user的访问记录
         access_historys = DoubanUserAction.where(user_id=user_id).select().execute().fetchall()
         ###遍历每一条访问数据
         for ah in access_historys:
-            ###获取访问数据里面的具体ID
+            ##获取访问数据里面的具体ID
             id = ah.category_id
-            ###得到访问的数据类型ID
+            ##得到访问的数据类型ID
             domain_id =kj ah.domain_id
-            ###如果ID第一次出现，则置兴趣指数为0
+            ##如果ID第一次出现，则置兴趣指数为0
             if id not in user_interest[domain_id]:
                 user_interest[domain_id][id] = 0
-            ###根据用户行为类型计算兴趣指数
+            ##根据用户行为类型计算兴趣指数
             user_interest[domain_id][id] += ACTION_TYPE_TO_DEGREE[ah.action_type]
 
         self.insert_interest_into_db(user_id, user_interest)
@@ -268,18 +268,18 @@ class UserInterest:
 ###推荐算法
    def rank_user_recommend(self, user_id, interests):
         user_recommend = {}
-        ###推荐指数数组，与newMovie的数量相同，初始值为0
+        ##推荐指数数组，与newMovie的数量相同，初始值为0
         for movie_id in self.new_movie_list:
             user_recommend[movie_id] = 0
         ###遍历四种数据类型
         for i in range(DOMAIN_NUM):
             sum = 0
-            ###获取interest字典里数据类型对应的value数组
+            ##获取interest字典里数据类型对应的value数组
             if interests[i]:
-                ###求value的和sum
+                ##求value的和sum
                 for key, value in interests[i].items():
                     sum += value
-                ###遍历newMovies
+                ##遍历newMovies
                 for movie_id in self.new_movie_list:
                     new_movie = self.new_movie_list[movie_id]
                     ##检测每个具体ID在字典里的Value，如果出现在兴趣字典里，则进行加权
