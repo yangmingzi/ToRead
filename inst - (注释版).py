@@ -22,7 +22,9 @@ ACTION_TYPE_TO_DEGREE = [1.0, 1.0, 0.5]
 INTEREST_NUM_PER_CATEGORY = 3
 NEW_MOVIE_NUM = 20
 RECOMMEND_NUM = 6
-
+###DOMAIN   四种数据类型（电影，导演，演员，种类）
+###CategoryID   四种数据类型对应的具体ID 
+###
 class UserInterest:
     def __init__(self):
         self.dic_dir = 'process_url/dic'
@@ -37,12 +39,12 @@ class UserInterest:
 
         self.new_movie_list = self.get_new_movie_list()
         self.load_jieba_dic()
-###为结巴分词扩充词库
+###使用三个原始词典为结巴分词扩充词库
     def load_jieba_dic(self):
         jieba.load_userdict(os.path.join(self.dic_dir, self.movie_dic_name))
         jieba.load_userdict(os.path.join(self.dic_dir, self.director_dic_name))
         jieba.load_userdict(os.path.join(self.dic_dir, self.actor_dic_name))
-
+###获得最新的前20个电影，生成字典
     def get_new_movie_list(self):
         new_movie_list = {}
         new_movies = DoubanMovieNewest.limit(20, offset=0).select().execute().fetchall()
@@ -56,7 +58,7 @@ class UserInterest:
             movie_dic['genre'] = [long(genre_id) for genre_id in movie.genres.split(',') if genre_id and len(genre_id) == 8]
             new_movie_list[movie.id] = movie_dic
         return new_movie_list
-###读入三个词典
+###建立三个原始词典
     def get_dic(self):
         movies = DoubanMovie.select().execute().fetchall()
         directors = DoubanDirector.select().execute().fetchall()
@@ -108,7 +110,7 @@ class UserInterest:
         fw1.close()
         fw2.close()
         fw3.close()
-###检测系统的输入
+###获取网络访问数据
     def process_input(self):
         http_data = {}
         while 1:
@@ -151,7 +153,7 @@ class UserInterest:
             return user_id
         except Exception, e:
             return 0
-###
+###检查是否已上一次的访问记录相同，相同则不处理，不相同则将last_access_url置为本次访问的url
     def insert_data_into_db(self, data, user_id):
         if user_id:
             last_access_url = self.user_last_access.get(user_id)
@@ -165,7 +167,7 @@ class UserInterest:
                 #print 'add access url (user_id: %s, host: %s, url: %s)' % (user_id, data['host'], data['path'])
             #except Exception, e:
             #    pass
-###key是什么物理意义？
+###检测http_data信息是否完整，只有信息完整的http数据才被处理
     def http_data_is_complete(self,http_data):
         for key in ['user_ip', 'user_ua', 'host', 'path']:
             if key not in http_data:
@@ -175,7 +177,7 @@ class UserInterest:
     def process_http_data(self, data):
         user_id = self.get_user_id(data['user_ip'], data['user_ua'])
         self.insert_data_into_db(data, user_id)
-###处理url
+###处理url，分析出用户的行为
     def process_url(self, user_id, host, path):
         change_happen = False
         if host == "www.baidu.com":
@@ -299,5 +301,5 @@ class UserInterest:
                 DoubanUserRecommend.create(user_id=user_id, movie_id=recommend[i][0], rank=i)
 
 if __name__ == "__main__":
-    ui = UserInterest()
+    ui = UserInterest()##定义并实例化一个UserInterest对象
     ui.run()
